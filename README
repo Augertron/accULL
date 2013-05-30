@@ -1,0 +1,144 @@
+************************************************************************
+                 _   _ _      _
+                | | | | |    | |
+   __ _  ___ ___| | | | |    | |
+  / _` |/ __/ __| | | | |    | |
+ | (_| | (_| (__| |_| | |____| |____
+  \__,_|\___\___|\___/\_____/\_____/
+                                     development-version
+
+Blog: http://accull.wordpress.com 
+Project Page: http://ruyman.bitbucket.org/accull/
+Group webpage: http://cap.pcg.ull.es/
+
+************************************************************************
+                            Introduction
+************************************************************************
+accULL is the OpenACC implementation made at La Laguna University. accULL 
+has a two layer structure consisting on a compiler (YaCF) and a runtime 
+library (Frangollo).
+
+YaCF , Yet another Compiler Framework, is a translator framework designed
+code.Its components are independent from each other, and can be used in full 
+source to source drivers or in small test transformations. Within YaCF we 
+have included several classes, modules and packages to solve particular 
+problems within Source-to-Source code code translations.
+
+Frangollo acts as an interface between the user  (or an intelligent enough
+compiler) and an abstract accelerator model that we call the Frangollo 
+Platform Model. The library provides a programmer-friendly interface for 
+the most common usage patterns of accelerators, and enables writting
+platform-independent code. To which platform the model will be instantiated 
+can be decided at runtime after exploring the available devices.
+The Frangollo Platform Model is inspired by the OpenCL Programming Model.
+Instead of focusing on the devices and their low level details, the Frangollo
+Platform Model is a  generic approach to the concept of accelerator, and 
+adds some rules to handle memory coherence between the host and the 
+device(s).
+ 
+************************************************************************
+                           Prerequisites (yacf)
+************************************************************************
+Ply >= 3.3 (Python Lex-Yacc): http://www.dabeaz.com/ply/
+Mako templates              : http://www.makotemplates.org/
+lxml                        : http://lxml.de/
+Sphinx (optional)           : http://sphinx.pocoo.org/
+
+Example of installation:
+
+    $ easy_install ply
+    $ easy_install mako
+    $ easy_install lxml
+    $ easy_install sphinx
+
+
+************************************************************************
+                           Prerequisites (frangollo)
+************************************************************************
+Autoconf               : http://www.gnu.org/software/autoconf/
+Automake               : http://www.gnu.org/software/automake/
+GCC-C++ 4.5.2          : http://gcc.gnu.org/
+
+For NVIDIA platforms:
+CUDA 5.0               : http://developer.nvidia.com/cuda/cuda-downloads
+(includes OpenCL support)
+
+For OpenCL platforms:
+Intel OpenCL SDK       : http://software.intel.com/en-us/vcsource/tools/opencl-sdk
+
+
+************************************************************************
+                           How to install
+************************************************************************
+
+1. Decompress the accULL-dev.tar.gz file
+	$ cd ~
+	$ tar xvzf accULL-dev.tar.gz
+
+2. Set the right path to environment variables in file env-parameters.sh.
+	$ cd accULL-dev
+	$ vim env-parameters.sh
+	
+3. Configure and compile accULL.
+	$./build-accull.sh
+
+4. Verify the settings of the yacf/config_local.py 
+   $ $EDITOR yacf/config_local.py
+
+4. Check your installation. 
+	$ source env-parameters.sh
+	$ cd example  # PI problem in OpenACC
+	$ make
+	$ cd accull_*/pi.acc.c/Frangollo  
+	$./main.exe
+
+************************************************************************
+                              Contents (yacf)
+************************************************************************
+   bin          All yacf drivers
+   doc          yacf Documentation
+   examples     Code examples (OpenACC, MPI, OpenMP) 
+   MiddleEnd    Optimisations in the MiddleEnd of yacf
+   tests        Test directory
+   Frontend     yacf Frontends (OpenACC, OpenMP, C99) 
+   Backed       yacf Backends  (Frangollo, CUDA, MPI, C99)
+
+
+************************************************************************
+                              Contents (frangollo)
+************************************************************************
+
+	doc        frangollo documentation
+	examples   some frangollo examples (interface level and kernels)
+	src        frangollo source code
+
+************************************************************************
+                   Documentation and links
+************************************************************************
+
+   Documentation is located at
+       * Blog: http://accull.wordpress.com  
+       * Project Page: http://ruyman.bitbucket.org/accull/
+
+       More documentation will be available soon.
+
+   Support:
+       * accull support forum : https://groups.google.com/forum/?fromgroups#!forum/accull
+
+   Repositories:
+  	  * accULL repository           : https://bitbucket.org/ruyman/accull
+     * Private Frangollo repository: https://bitbucket.org/ruyman/frangollo
+     * Public YaCF repository      : http://code.google.com/p/yacf/
+      
+   OpenACC:
+      * http://www.openacc-standard.org/
+
+
+************************************************************************
+                              Authors
+************************************************************************
+
+Ruymán Reyes      : rreyes@epcc.ed.ac.uk
+Juan José Fumero  : jfumeroa@ull.es
+Jose Lucas Grillo : jlgrillo@ull.es
+Francisco de Sande: fsande@ull.es

@@ -1,0 +1,28 @@
+************************************************************************
+                           How to install
+************************************************************************
+
+For prerequisites see README file.
+-----------------------------------------------------------------------
+
+1. Decompress the accULL-dev.tar.gz file
+	$ cd ~
+	$ tar xvzf accULL-dev.tar.gz
+
+2. Set the right path to environment variables in file env-parameters.sh.
+	$ cd accULL-dev
+	$ vim env-parameters.sh
+	
+3. Configure and compile accULL.
+	$./build-accull.sh
+
+4. Verify the settings of the yacf/config_local.py 
+   $ $EDITOR yacf/config_local.py
+
+4. Check your installation. 
+	$ source env-parameters.sh
+	$ cd example  # PI problem in OpenACC
+	$ make
+	$ cd accull_*/pi.acc.c/Frangollo  
+	$./main.exe
+

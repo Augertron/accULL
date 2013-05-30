@@ -1,0 +1,24 @@
+<%!
+    from Backends.Common.TemplateEngine.Functions import write_as_parameter_definition, rename_if_complex
+%>
+
+%for var in variables:
+    ${var.typedef or ""}
+%endfor
+
+ __global__ void ${funcName} ( 
+            ${', '.join(str(var.declaration) + rename_if_complex(var,'_cu')  for var in kernel_parameters)})
+)
+ {
+        int idx = blockIdx.x * blockDim.x + threadIdx.x;
+        int i  = idx;
+        %for var in local_vars:
+          ${var.declaration} ${var};
+        %endfor
+        /* We need to check if idx is inside limits (in case we have more threads than iterations) */
+        if ((${loop.init.rvalue} < i) && (${loop.cond})) 
+            ${loop.stmt};
+        }
+ }
+
+ 

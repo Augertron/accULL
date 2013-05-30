@@ -1,0 +1,195 @@
+#!/bin/bash
+
+#### Set this to your installation
+
+if [ -z $ACCULLBASE ] 
+then
+	echo "Variable ACCULLBASE undefined"
+	echo "  export ACCULLBASE to accull directory"
+	exit 
+fi
+
+YACF_PATH="${ACCULLBASE}/yacf"
+FRANGOLLO_PATH="${ACCULLBASE}/frangollo/"
+PYTHONBIN="python"
+
+# ---- Do not edit below this line -----
+
+base=$(pwd)
+PYTHONPATH=$YACF_PATH
+YACF_DRIVER="bin/c2frangollo.py"
+release=0.2
+
+  echo ' **************************************** '
+  echo '                 _    _ _      _          '
+  echo '                | |  | | |    | |         '
+  echo '   __ _  ___ ___| |  | | |    | |         '
+  echo '  / _` |/ __/ __| |  | | |    | |         '
+  echo ' | (_| | (_| (__| |__| | |____| |____     '
+  echo '  \__,_|\___\___|\____/|______|______|    '
+  echo ' **************************************** '
+  echo '  '
+  echo " Release $release "
+  echo '  '
+
+
+function warn( )
+{
+    echo -n "! "
+    echo $@
+}
+
+# usage
+# -------------------------------------
+# Display script usage instructions
+function usage ( ) 
+{
+  echo "   "
+  echo " This is the main accULL script, which runs the yacf driver and builds the project. "
+  echo " This script relies on a correct config_local.py file in the yacf directory.           "
+  echo " Refer to config_local_example.py for instructions on how to configure your yacf installation. "
+  echo " Usage "
+  echo " bash $0 [<options>] <source_file> "
+  echo " Where options are: "
+  echo "  -k : Keep previous files if existing "
+  echo "  -o : Output directory name "
+  echo "  -c : Do not build project directory "
+}
+
+# run_test
+# ---------------------------------------
+# Generates the code for a test, build the project directory and checks the results
+function build_code ( ) 
+{
+   local code_name=$1
+   local source_file=$2
+   local destination_dir=$3
+   local verbose=$4   
+   local link=$5
+
+   if [ ! -e $source_file ]; then
+	echo "* $code_name does not exists "
+	return
+   else
+	echo "* Building $code_name "
+   fi
+   echo  "* Running StS translation "
+
+   if [[ $verbose -gt 0 ]]; then
+	log_file=1
+   else
+	log_file=$(mktemp ./yacf_log_XXXXX)
+   fi
+
+   $PYTHONBIN $YACF_PATH/$YACF_DRIVER $source_file $destination_dir &> $log_file
+   if [ ! -d $destination_dir/Frangollo ]; then
+	warn " Compilation of $code_name FAILED (no Project directory build )"
+	return
+   fi
+   echo "* StS translation appears to be OK "
+
+   if [[ $link -gt 0 ]]; then
+	   echo "* Building the project directory "
+	   cd $destination_dir/Frangollo/
+	   if [[ $verbose -gt 0 ]]; then
+		log_file=1
+	   else
+		log_file=$(mktemp ./make_log_XXXXX)
+	   fi
+	   make &> $log_file
+	   cd $base
+	   echo "* Building finished, check output "
+   else
+	warn " Not building the project directory "
+   fi
+   return 
+}
+
+verbose=0
+TEST_CUDA=0
+TEST_OPENCL=0
+KEEP_FILES=0
+LINK=1
+while getopts ":kco:" opt; do
+   case $opt in
+       c) 
+	   echo "* Just build the object file , do not link the exe "
+	   LINK=0
+	   ;;
+       v) echo "* Verbose output "
+	   verbose=1
+           ;;
+       o) echo "* Output file name $OPTARG "
+		destination=$OPTARG
+	   ;;
+       k)  
+	   if [ ! -d $testdir ]; then
+		echo "* No old files to keep "
+	   else
+	   	echo "* Preserving old files "
+	   	KEEP_FILES=1
+	   fi
+	   ;;
+       \?)  
+           warn " Invalid option -$OPTARG"
+           exit 1
+           ;;
+       :)
+           warn " Option -$OPTARG requires an argument "
+	   usage 
+           exit 1
+           ;;
+   esac
+done
+
+if [ ! -e "$YACF_PATH" ]; then
+ 	warn " YaCF could not be found in $YACF_PATH "
+	usage
+	exit 1
+fi
+
+if [ ! -e "$FRANGOLLO_PATH" ]; then
+	warn " Frangollo could not be found "
+	exit 1
+fi
+
+source_name=${@:$OPTIND:1}
+
+if [[ -z "$source_name" ]]; then
+	warn " An input file name is required "
+	usage
+	exit 1
+fi
+
+if [ ! -e $source_name ]; then
+	warn " Cannot open input file $source_name"
+	usage
+	exit 1
+fi
+
+if [ ! -e $YACF_PATH/config_local.py ]; then
+	echo "! YaCF configuration file not found "
+	usage
+	exit 1
+fi
+
+if [[ -z "$destination" ]]; then
+    tmpname=$(mktemp -d ./accull_XXXXX) || { echo " Cannot create temp file"; exit 1; }
+    sname=$(basename $source_name)
+    destination=$tmpname/$sname
+fi
+
+name=$(basename $destination)
+dir=$(dirname $destination)
+
+if [ ! -e $dir ]; then
+	echo " Cannot access $dir to write the output "
+	usage
+	exit 1
+fi
+
+echo "* Processing $source_name to $destination "
+
+build_code $name $source_name $destination $verbose $LINK
+
+echo "* Finished "
