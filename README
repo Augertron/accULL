@@ -5,11 +5,10 @@
   / _` |/ __/ __| | | | |    | |
  | (_| | (_| (__| |_| | |____| |____
   \__,_|\___\___|\___/\_____/\_____/
-                                     development-version
+                                     0.3alpha
 
-Blog: http://accull.wordpress.com 
-Project Page: http://ruyman.bitbucket.org/accull/
-Group webpage: http://cap.pcg.ull.es/
+http://cap.pcg.ull.es/en/accULL
+http://accull.wordpress.com 
 
 ************************************************************************
                             Introduction
@@ -41,7 +40,7 @@ device(s).
 ************************************************************************
 Ply >= 3.3 (Python Lex-Yacc): http://www.dabeaz.com/ply/
 Mako templates              : http://www.makotemplates.org/
-lxml                        : http://lxml.de/
+lxml (optional)             : http://lxml.de/
 Sphinx (optional)           : http://sphinx.pocoo.org/
 
 Example of installation:
@@ -61,7 +60,7 @@ GCC-C++ 4.5.2          : http://gcc.gnu.org/
 
 For NVIDIA platforms:
 CUDA 5.0               : http://developer.nvidia.com/cuda/cuda-downloads
-(includes OpenCL support)
+Need nvidia-opencl-dev package to include OpenCL support
 
 For OpenCL platforms:
 Intel OpenCL SDK       : http://software.intel.com/en-us/vcsource/tools/opencl-sdk
@@ -71,26 +70,31 @@ Intel OpenCL SDK       : http://software.intel.com/en-us/vcsource/tools/opencl-s
                            How to install
 ************************************************************************
 
-1. Decompress the accULL-dev.tar.gz file
-	$ cd ~
-	$ tar xvzf accULL-dev.tar.gz
+1. Decompress the accULL-0.3alpha.tar.gz file
+	$ tar xvzf accULL-0.3alpha.tar.gz
 
 2. Set the right path to environment variables in file env-parameters.sh.
-	$ cd accULL-dev
+	$ cd accULL-0.3alpha/
 	$ vim env-parameters.sh
+	$ . ./env-parameters.sh
 	
 3. Configure and compile accULL.
 	$./build-accull.sh
 
-4. Verify the settings of the yacf/config_local.py 
+4. Verify the settings of the yacf/config_local.py & yacf/makefile.mk
    $ $EDITOR yacf/config_local.py
+   $ $EDITOR yacf/makefile.mk
 
-4. Check your installation. 
+5. Check your installation. 
 	$ source env-parameters.sh
 	$ cd example  # PI problem in OpenACC
 	$ make
 	$ cd accull_*/pi.acc.c/Frangollo  
 	$./main.exe
+
+6. To fully test installation.
+	$ cd yacf
+	$ bash build_tests.sh -b CUDA -b OPENCL
 
 ************************************************************************
                               Contents (yacf)
@@ -117,18 +121,16 @@ Intel OpenCL SDK       : http://software.intel.com/en-us/vcsource/tools/opencl-s
 ************************************************************************
 
    Documentation is located at
-       * Blog: http://accull.wordpress.com  
-       * Project Page: http://ruyman.bitbucket.org/accull/
+       * http://llc.pcg.ull.es/
+       * http://accull.wordpress.com  
+       * http://yacf.googlecode.com/hg/yacf/doc/_build/html/index.html
 
        More documentation will be available soon.
 
-   Support:
-       * accull support forum : https://groups.google.com/forum/?fromgroups#!forum/accull
-
    Repositories:
-  	  * accULL repository           : https://bitbucket.org/ruyman/accull
-     * Private Frangollo repository: https://bitbucket.org/ruyman/frangollo
-     * Public YaCF repository      : http://code.google.com/p/yacf/
+      * accULL repository           : https://bitbucket.org/ruyman/accull
+      * Private Frangollo repository: https://bitbucket.org/ruyman/frangollo
+      * Public YaCF repository      : http://code.google.com/p/yacf/
       
    OpenACC:
       * http://www.openacc-standard.org/
@@ -138,7 +140,8 @@ Intel OpenCL SDK       : http://software.intel.com/en-us/vcsource/tools/opencl-s
                               Authors
 ************************************************************************
 
-Ruymán Reyes      : rreyes@epcc.ed.ac.uk
+Ruymán Reyes      : rreyes@ull.es
+Ivan López        : ilopezro@ull.es
 Juan José Fumero  : jfumeroa@ull.es
 Jose Lucas Grillo : jlgrillo@ull.es
 Francisco de Sande: fsande@ull.es
