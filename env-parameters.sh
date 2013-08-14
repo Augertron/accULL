@@ -6,7 +6,7 @@
 # accULL & CUDA directories
 export ACCULLBASE=$(pwd)
 
-export CUDADIR=/opt/soft/cuda/5.0/
+export CUDADIR=
 
 # ---- Do not edit below this line -----
 

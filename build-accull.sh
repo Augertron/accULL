@@ -12,6 +12,7 @@ echo "#######################################"
 echo "          Configuring yacf "
 echo "#######################################"
 cp $YACFDIR/config_local.example.py $YACFDIR/config_local.py
+cp $YACFDIR/makefile_example.mk $YACFDIR/makefile.mk
 cd $YACFDIR/Frontend
 python _ast_gen.py
 cd -

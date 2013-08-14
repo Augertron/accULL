@@ -8,7 +8,7 @@ PYTHONBIN="python"
 
 # For NVIDIA CUDA
 CC=${CUDADIR}/bin/nvcc
-FLAGS="-Xcompiler -fopenmp -arch=${NVCCARCH} -lrt -lcuda -lOpenCL -lrt -L${CUDADIR}/lib64/ -lcuda"
+FLAGS="-Xcompiler -fopenmp -arch=sm_20 -lrt -lcuda -lOpenCL -lrt -L${CUDADIR}/lib64/ -lcuda"
 # For NVIDIA OpenCL
 #CC=g++
 #FLAGS="-lrt -fopenmp -lcuda -lOpenCL -D_POSIX_C_SOURCE=199309L -lrt -g"
@@ -237,9 +237,14 @@ build_code $name $source_name $destination $verbose $BUILD $COPYBACK
 
 done
 
+if [[ "$CC" == *nvcc ]];then
+  FLAGS=`echo $FLAGS | sed 's/-arch=sm_..//'`
+  FLAGS="$FLAGS -arch=$NVCCARCH"
+fi
+
 if [[ $BUILD -eq 0 ]]; then
    # Call the native compiler to link all the .o files
-   compline="$CC ${FLAGS} *.o $FRANGOLLO_PATH/src/libfrangollo.a -o $exe_name"
+   compline="$CC ${FLAGS} ${archflag} *.o $FRANGOLLO_PATH/src/libfrangollo.a -o $exe_name"
    echo $compline
    `$compline`
 fi
