@@ -11,6 +11,7 @@ source env-parameters.sh
 echo "#######################################"
 echo "          Configuring yacf "
 echo "#######################################"
+cp $YACFDIR/config_local.example.py $YACFDIR/config_local.py
 cd $YACFDIR/Frontend
 python _ast_gen.py
 cd -
