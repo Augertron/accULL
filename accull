@@ -2,23 +2,26 @@
 
 #### Set this to your installation
 
-if [ -z $ACCULLBASE ] 
-then
-	echo "Variable ACCULLBASE undefined"
-	echo "  export ACCULLBASE to accull directory"
-	exit 
-fi
-
-YACF_PATH="${ACCULLBASE}/yacf"
-FRANGOLLO_PATH="${ACCULLBASE}/frangollo/"
+YACF_PATH=${YACFDIR}
+FRANGOLLO_PATH=${FRANGOLLODIR}
 PYTHONBIN="python"
+
+# For NVIDIA CUDA
+CC=${CUDADIR}/bin/nvcc
+FLAGS="-Xcompiler -fopenmp -arch=${NVCCARCH} -lrt -lcuda -lOpenCL -lrt -L${CUDADIR}/lib64/ -lcuda"
+# For NVIDIA OpenCL
+#CC=g++
+#FLAGS="-lrt -fopenmp -lcuda -lOpenCL -D_POSIX_C_SOURCE=199309L -lrt -g"
+#FLAGS="-O3 -fopenmp "
+##FLAGS=$FLAGS" -framework OpenCL"
+#FLAGS=$FLAGS" -L${CUDADIR}/lib64 -lcuda -lOpenCL -lrt -lm"
 
 # ---- Do not edit below this line -----
 
 base=$(pwd)
-PYTHONPATH=$YACF_PATH
+export PYTHONPATH=$YACF_PATH
 YACF_DRIVER="bin/c2frangollo.py"
-release=0.2
+release=0.3alpha
 
   echo ' **************************************** '
   echo '                 _    _ _      _          '
@@ -30,7 +33,6 @@ release=0.2
   echo ' **************************************** '
   echo '  '
   echo " Release $release "
-  echo '  '
 
 
 function warn( )
@@ -39,6 +41,14 @@ function warn( )
     echo $@
 }
 
+function info( )
+{
+    echo -n "* "
+    echo $@
+}
+
+
+
 # usage
 # -------------------------------------
 # Display script usage instructions
@@ -46,14 +56,16 @@ function usage ( )
 {
   echo "   "
   echo " This is the main accULL script, which runs the yacf driver and builds the project. "
-  echo " This script relies on a correct config_local.py file in the yacf directory.           "
+  echo " This script relies on a correct config_local.py and makefile.mk files available. "
   echo " Refer to config_local_example.py for instructions on how to configure your yacf installation. "
   echo " Usage "
   echo " bash $0 [<options>] <source_file> "
   echo " Where options are: "
   echo "  -k : Keep previous files if existing "
-  echo "  -o : Output directory name "
-  echo "  -c : Do not build project directory "
+  echo "  -o name : Output binary name "
+  echo "  -c : Do not create a binary, just the object files "
+  echo "  -w name : Store the temporary transformation files in directory \"name\" "
+  echo "  -a nvidia_arch : Select NVIDIA architecture. Default is sm_20"
 }
 
 # run_test
@@ -65,43 +77,51 @@ function build_code ( )
    local source_file=$2
    local destination_dir=$3
    local verbose=$4   
-   local link=$5
+   local build=1             # Always try to build th code
+   local copy_back=$6;
 
    if [ ! -e $source_file ]; then
-	echo "* $code_name does not exists "
+	info " $code_name does not exists "
 	return
    else
-	echo "* Building $code_name "
+	info " Building $code_name "
    fi
    echo  "* Running StS translation "
 
    if [[ $verbose -gt 0 ]]; then
-	log_file=1
+	$PYTHONBIN $YACF_PATH/$YACF_DRIVER $source_file $destination_dir
    else
 	log_file=$(mktemp ./yacf_log_XXXXX)
+   	$PYTHONBIN $YACF_PATH/$YACF_DRIVER $source_file $destination_dir &> $log_file
+	info " See $log_file for more details "
    fi
 
-   $PYTHONBIN $YACF_PATH/$YACF_DRIVER $source_file $destination_dir &> $log_file
    if [ ! -d $destination_dir/Frangollo ]; then
 	warn " Compilation of $code_name FAILED (no Project directory build )"
 	return
    fi
-   echo "* StS translation appears to be OK "
+   info " StS translation appears to be OK "
 
-   if [[ $link -gt 0 ]]; then
-	   echo "* Building the project directory "
+   if [[ $build -gt 0 ]]; then
+	   info " Building the project directory "$destination_dir
 	   cd $destination_dir/Frangollo/
 	   if [[ $verbose -gt 0 ]]; then
 		log_file=1
 	   else
 		log_file=$(mktemp ./make_log_XXXXX)
 	   fi
-	   make &> $log_file
+	   make CCFLAGS="$CCFLAGS"  &> $log_file
 	   cd $base
-	   echo "* Building finished, check output "
+	   info " Building finished, check output "
    else
 	warn " Not building the project directory "
    fi
+
+   if [[ ($copy_back -gt 0) && ($build -gt 0) ]]; then
+	  info " Copying result files back to origin"
+     cp -f $destination_dir/Frangollo/*.{o,ptx,cl} $base &> /dev/null 
+   fi
+
    return 
 }
 
@@ -109,27 +129,32 @@ verbose=0
 TEST_CUDA=0
 TEST_OPENCL=0
 KEEP_FILES=0
-LINK=1
-while getopts ":kco:" opt; do
+BUILD=0
+exe_name="acc.out"
+COPYBACK=1
+export NVCCARCH="sm_20"
+
+while getopts ":kcoa:vw:c" opt; do
    case $opt in
        c) 
-	   echo "* Just build the object file , do not link the exe "
-	   LINK=0
+	   info " Just build the object file , do not link the exe "
+	   BUILD=1
 	   ;;
-       v) echo "* Verbose output "
+       v) info " Verbose output "
 	   verbose=1
            ;;
-       o) echo "* Output file name $OPTARG "
+       w) info " Output directory name $OPTARG "
 		destination=$OPTARG
 	   ;;
-       k)  
-	   if [ ! -d $testdir ]; then
-		echo "* No old files to keep "
-	   else
-	   	echo "* Preserving old files "
-	   	KEEP_FILES=1
-	   fi
+       o) info " Output executable name $OPTARG"
+		exe_name=$OPTARG
+	   ;;   
+       k)  info " Not copying back generated files "
+	   	COPYBACK=0
 	   ;;
+       a) info " NVIDIA architectecure $OPTARG selected "
+	        export NVCCARCH=$OPTARG
+           ;;
        \?)  
            warn " Invalid option -$OPTARG"
            exit 1
@@ -153,10 +178,22 @@ if [ ! -e "$FRANGOLLO_PATH" ]; then
 	exit 1
 fi
 
-source_name=${@:$OPTIND:1}
+
+remaining=${@:$OPTIND:$#}
+
+for source_name in $remaining; do
+
+filename=$(basename $source_name)
+extension="${filename##*.}"
+filename="${filename%.*}"
+
+if [[ $extension == 'o' ]]; then
+    info " Object file won't be translated $source_name "
+    continue
+fi
 
 if [[ -z "$source_name" ]]; then
-	warn " An input file name is required "
+	warn " Cannot find $source_name "
 	usage
 	exit 1
 fi
@@ -168,13 +205,19 @@ if [ ! -e $source_name ]; then
 fi
 
 if [ ! -e $YACF_PATH/config_local.py ]; then
-	echo "! YaCF configuration file not found "
+	warn " YaCF configuration file not found "
 	usage
 	exit 1
 fi
 
+if [ ! -e $YACF_PATH/makefile.mk ]; then
+	warn " Default makefile.mk not found. "
+   warn " Ensure you set a path to the makefile.mk file in the config_local or you'll get building errors. "
+fi
+
+
 if [[ -z "$destination" ]]; then
-    tmpname=$(mktemp -d ./accull_XXXXX) || { echo " Cannot create temp file"; exit 1; }
+    tmpname=$(mktemp -d ./accull_XXXXX) || { warn " Cannot create temp file"; exit 1; }
     sname=$(basename $source_name)
     destination=$tmpname/$sname
 fi
@@ -183,13 +226,22 @@ name=$(basename $destination)
 dir=$(dirname $destination)
 
 if [ ! -e $dir ]; then
-	echo " Cannot access $dir to write the output "
+	warn " Cannot access $dir to write the output "
 	usage
 	exit 1
 fi
 
-echo "* Processing $source_name to $destination "
+info " Processing $source_name to $destination "
 
-build_code $name $source_name $destination $verbose $LINK
+build_code $name $source_name $destination $verbose $BUILD $COPYBACK
 
-echo "* Finished "
+done
+
+if [[ $BUILD -eq 0 ]]; then
+   # Call the native compiler to link all the .o files
+   compline="$CC ${FLAGS} *.o $FRANGOLLO_PATH/src/libfrangollo.a -o $exe_name"
+   echo $compline
+   `$compline`
+fi
+
+info " Finished "
