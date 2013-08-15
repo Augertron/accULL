@@ -79,7 +79,7 @@ Intel OpenCL SDK       : http://software.intel.com/en-us/vcsource/tools/opencl-s
 	$ . ./env-parameters.sh
 	
 3. Configure and compile accULL.
-	$./build-accull.sh
+	$ ./build-accull.sh
 
 4. Verify the settings of the yacf/config_local.py & yacf/makefile.mk
         $ $EDITOR yacf/config_local.py

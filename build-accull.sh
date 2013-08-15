@@ -5,9 +5,11 @@ echo "          accULL installation"
 echo "####################################"
 echo ""
 echo "All environment variables are in env-parameters.sh"
-cat env-parameters.sh
+#cat env-parameters.sh
 echo "--------------------------------------"
 source env-parameters.sh
+echo " ACCULLBASE = $ACCULLBASE "
+echo " CUDADIR = $CUDADIR "
 echo "#######################################"
 echo "          Configuring yacf "
 echo "#######################################"
