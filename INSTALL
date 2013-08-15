@@ -5,12 +5,12 @@
 For prerequisites see README file.
 -----------------------------------------------------------------------
 
-1. Decompress the accULL-dev.tar.gz file
+1. Decompress the accull-0.3alpha-rev2.tar.gz file
 	$ cd ~
-	$ tar xvzf accULL-dev.tar.gz
+	$ tar xvzf accull-0.3alpha-rev2.tar.gz
 
 2. Set the right path to environment variables in file env-parameters.sh.
-	$ cd accULL-dev
+	$ cd accull-0.3alpha-rev2/
 	$ vim env-parameters.sh
 	
 3. Configure and compile accULL.
