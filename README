@@ -82,8 +82,8 @@ Intel OpenCL SDK       : http://software.intel.com/en-us/vcsource/tools/opencl-s
 	$./build-accull.sh
 
 4. Verify the settings of the yacf/config_local.py & yacf/makefile.mk
-   $ $EDITOR yacf/config_local.py
-   $ $EDITOR yacf/makefile.mk
+        $ $EDITOR yacf/config_local.py
+        $ $EDITOR yacf/makefile.mk
 
 5. Check your installation. 
 	$ source env-parameters.sh

@@ -16,8 +16,9 @@ For prerequisites see README file.
 3. Configure and compile accULL.
 	$./build-accull.sh
 
-4. Verify the settings of the yacf/config_local.py 
-   $ $EDITOR yacf/config_local.py
+4. Verify the settings of the yacf/config_local.py & yacf/makefile.mk
+        $ $EDITOR yacf/config_local.py
+        $ $EDITOR yacf/makefile.mk
 
 4. Check your installation. 
 	$ source env-parameters.sh
