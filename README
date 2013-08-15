@@ -93,7 +93,7 @@ Intel OpenCL SDK       : http://software.intel.com/en-us/vcsource/tools/opencl-s
 
 6. To fully test installation.
 	$ cd yacf
-	$ bash build_tests.sh -b CUDA -b OPENCL
+	$ bash build_tests.sh [-b CUDA] [-b OPENCL] [-w <wrapper-exe>]
 
 ************************************************************************
                               Contents (yacf)

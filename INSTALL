@@ -28,5 +28,5 @@ For prerequisites see README file.
 
 6. To fully test installation.
         $ cd yacf
-        $ bash build_tests.sh -b CUDA -b OPENCL
+        $ bash build_tests.sh [-b CUDA] [-b OPENCL] [-w <wrapper-exe>]
 

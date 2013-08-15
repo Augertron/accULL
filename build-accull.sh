@@ -31,7 +31,19 @@ echo "         Configuring frangollo "
 echo "#######################################"
 cd $FRANGOLLODIR
 autoreconf -fiv
-./configure --enable-acc --enable-cuda --enable-ocl
+read -p "Are you want to compile CUDA Backend (Y/y/n)? " -n 1 -r
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
+    COMPILEWITHCUDA="--enable-cuda"
+fi
+echo ""
+read -p "Are you want to compile OPENCL Backend (Y/y/n)? " -n 1 -r
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
+    COMPILEWITHOPCL="--enable-ocl"
+fi
+echo ""
+./configure --enable-acc $COMPILEWITHCUDA $COMPILEWITHOPCL
 make
 echo "#######################################"
 echo "       accULL installation completed"
