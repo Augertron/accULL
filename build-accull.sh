@@ -11,8 +11,14 @@ source env-parameters.sh
 echo "#######################################"
 echo "          Configuring yacf "
 echo "#######################################"
-cp $YACFDIR/config_local.example.py $YACFDIR/config_local.py
-cp $YACFDIR/makefile_example.mk $YACFDIR/makefile.mk
+if [ ! -e $YACFDIR/config_local.py ]; then
+   echo " config_local.oy not found. Copying it from config_local.example.py ... "
+   cp $YACFDIR/config_local.example.py $YACFDIR/config_local.py
+fi
+if [ ! -e $YACFDIR/makefile.mk ]; then
+   echo " makefile.mk not found. Copying it from makefile_example.mk ... "
+   cp $YACFDIR/makefile_example.mk $YACFDIR/makefile.mk
+fi
 cd $YACFDIR/Frontend
 python _ast_gen.py
 cd -

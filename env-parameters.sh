@@ -6,7 +6,11 @@
 # accULL & CUDA directories
 export ACCULLBASE=$(pwd)
 
+# CUDA Directory
 export CUDADIR=
+
+# Default NVIDIA CUDA architecture
+export DEFAULTARCH="sm_20"
 
 # ---- Do not edit below this line -----
 
