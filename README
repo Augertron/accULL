@@ -89,8 +89,7 @@ Intel OpenCL SDK       : http://software.intel.com/en-us/vcsource/tools/opencl-s
 	$ source env-parameters.sh
 	$ cd example  # PI problem in OpenACC
 	$ make
-	$ cd accull_*/pi.acc.c/Frangollo  
-	$./main.exe
+	$ ./pi-accULL.exe
 
 6. To fully test installation.
 	$ cd yacf
