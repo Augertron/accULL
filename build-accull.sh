@@ -31,6 +31,11 @@ echo "         Configuring frangollo "
 echo "#######################################"
 cd $FRANGOLLODIR
 autoreconf -fiv
+if [ $? -eq 0 ]; then
+	echo " ................................. [ok]"
+else
+	exit 1
+fi
 read -p "Are you want to compile CUDA Backend (Y/y/n)? " -n 1 -r
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
@@ -41,10 +46,28 @@ read -p "Are you want to compile OPENCL Backend (Y/y/n)? " -n 1 -r
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
     COMPILEWITHOPCL="--enable-ocl"
+else 
+if [ -z "${COMPILEWITHCUDA}" ]; then
+	echo ""
+	echo ""
+	echo " >>> ERROR: accull needs at least one backend. Exiting ... "
+	echo ""
+	exit 1
+fi
 fi
 echo ""
 ./configure --enable-acc $COMPILEWITHCUDA $COMPILEWITHOPCL
+if [ $? -eq 0 ]; then
+	echo " ................................. [ok]"
+else
+	exit 1
+fi
 make
+if [ $? -eq 0 ]; then
+	echo " ................................. [ok]"
+else
+	exit 1
+fi	
 echo "#######################################"
 echo "       accULL installation completed"
 echo "#######################################"
