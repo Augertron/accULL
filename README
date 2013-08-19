@@ -18,7 +18,7 @@ has a two layer structure consisting on a compiler (YaCF) and a runtime
 library (Frangollo).
 
 YaCF , Yet another Compiler Framework, is a translator framework designed
-code.Its components are independent from each other, and can be used in full 
+code. Its components are independent from each other, and can be used in full 
 source to source drivers or in small test transformations. Within YaCF we 
 have included several classes, modules and packages to solve particular 
 problems within Source-to-Source code code translations.
@@ -31,13 +31,14 @@ platform-independent code. To which platform the model will be instantiated
 can be decided at runtime after exploring the available devices.
 The Frangollo Platform Model is inspired by the OpenCL Programming Model.
 Instead of focusing on the devices and their low level details, the Frangollo
-Platform Model is a  generic approach to the concept of accelerator, and 
+Platform Model is a generic approach to the concept of accelerator, and 
 adds some rules to handle memory coherence between the host and the 
 device(s).
  
 ************************************************************************
                            Prerequisites (yacf)
 ************************************************************************
+Python >= 2.7.x             : http://www.python.org/
 Ply >= 3.3 (Python Lex-Yacc): http://www.dabeaz.com/ply/
 Mako templates              : http://www.makotemplates.org/
 lxml (optional)             : http://lxml.de/
@@ -54,8 +55,8 @@ Example of installation:
 ************************************************************************
                            Prerequisites (frangollo)
 ************************************************************************
-Autoconf               : http://www.gnu.org/software/autoconf/
-Automake               : http://www.gnu.org/software/automake/
+Autoconf (GNU) 2.69    : http://www.gnu.org/software/autoconf/
+Automake (GNU) 1.13    : http://www.gnu.org/software/automake/
 GCC-C++ 4.5.2          : http://gcc.gnu.org/
 
 For NVIDIA platforms:
