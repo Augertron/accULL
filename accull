@@ -66,7 +66,7 @@ function usage ( )
   echo "  -o name : Output binary name "
   echo "  -c : Do not create a binary, just the object files "
   echo "  -w name : Store the temporary transformation files in directory \"name\" "
-  echo "  -a nvidia_arch : Select NVIDIA architecture. Default is sm_20"
+  echo "  -a nvidia_arch : Select NVIDIA architecture. Default is $DEFAULTARCH"
 }
 
 # run_test
