@@ -1,4 +1,4 @@
-yacf=llcomp
-frangollo=frangollo
+yacf=https://bitbucket.org/ruyman/llcomp/
+frangollo=https://bitbucket.org/ruyman/frangollo/
 [subpaths]
 (https://(?:[^@]+@)?bitbucket\.org/[^/]+)(/[^/]+)/(.*) = \1/\3
