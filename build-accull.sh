@@ -36,13 +36,13 @@ if [ $? -eq 0 ]; then
 else
 	exit 1
 fi
-read -p "Are you want to compile CUDA Backend (Y/y/n)? " -n 1 -r
+read -p "Do you want to compile CUDA Backend (Y/y/n)? " -n 1 -r
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
     COMPILEWITHCUDA="--enable-cuda"
 fi
 echo ""
-read -p "Are you want to compile OPENCL Backend (Y/y/n)? " -n 1 -r
+read -p "Do you want to compile OPENCL Backend (Y/y/n)? " -n 1 -r
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
     COMPILEWITHOPCL="--enable-ocl"
