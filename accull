@@ -21,7 +21,7 @@ FLAGS="-Xcompiler -fopenmp -arch=${DEFAULTARCH} -lrt -lcuda -lOpenCL -lrt -L${CU
 base=$(pwd)
 export PYTHONPATH=$YACF_PATH
 YACF_DRIVER="bin/c2frangollo.py"
-release=0.3alpha-rev2
+release=0.3
 
   echo ' **************************************** '
   echo '                 _    _ _      _          '
