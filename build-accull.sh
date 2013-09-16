@@ -71,3 +71,6 @@ fi
 echo "#######################################"
 echo "       accULL installation completed"
 echo "#######################################"
+echo " * "
+echo " * Add '. $(ACCULLBASE)/env-parameters.sh' to your shell profile."
+echo " * "
