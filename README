@@ -5,7 +5,7 @@
   / _` |/ __/ __| | | | |    | |
  | (_| | (_| (__| |_| | |____| |____
   \__,_|\___\___|\___/\_____/\_____/
-                                     0.3alpha-rev2
+                                     0.3
 
 http://cap.pcg.ull.es/en/accULL
 http://accull.wordpress.com 
@@ -71,11 +71,11 @@ Intel OpenCL SDK       : http://software.intel.com/en-us/vcsource/tools/opencl-s
                            How to install
 ************************************************************************
 
-1. Decompress the accull-0.3alpha-rev2.tar.gz file
-	$ tar xvzf accull-0.3alpha-rev2.tar.gz
+1. Decompress the accull-0.3.tar.gz file
+	$ tar xvzf accull-0.3.tar.gz
 
 2. Set the right path to environment variables in file env-parameters.sh.
-	$ cd accull-0.3alpha-rev2/
+	$ cd accull-0.3/
 	$ vim env-parameters.sh
 	$ . ./env-parameters.sh
 	
