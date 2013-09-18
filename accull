@@ -133,7 +133,7 @@ KEEP_FILES=0
 BUILD=0
 exe_name="acc.out"
 COPYBACK=1
-export NVCCARCH="sm_20"
+export NVCCARCH=${DEFAULTARCH}
 
 while getopts ":kco:vw:ha:" opt; do
    case $opt in
