@@ -136,6 +136,13 @@ Intel OpenCL SDK       : http://software.intel.com/en-us/vcsource/tools/opencl-s
    OpenACC:
       * http://www.openacc-standard.org/
 
+************************************************************************
+                             Known Issues
+************************************************************************
+- Using parameters of type double in some platforms may produce incorrect
+results. In particular, using this release with the Mac OpenCL Framework
+in the AMD GPU produces incorrect results in some tests. Use of the GPU 
+in this circumstances is discourages. We are investigating the issue.
 
 ************************************************************************
                               Authors
