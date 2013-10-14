@@ -111,7 +111,7 @@ function build_code ( )
 	   else
 		log_file=$(mktemp ./make_log_XXXXX)
 	   fi
-	   make CCFLAGS="$CCFLAGS"  &> $log_file
+	   CCFLAGS="$CCFLAGS" make &> $log_file
 	   cd $base
 	   info " Building finished, check output "
    else
