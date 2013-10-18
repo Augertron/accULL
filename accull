@@ -6,15 +6,43 @@ YACF_PATH=${YACFDIR}
 FRANGOLLO_PATH=${FRANGOLLODIR}
 PYTHONBIN="python"
 
-# For NVIDIA CUDA
-CC=${CUDADIR}/bin/nvcc
-FLAGS="-Xcompiler -fopenmp -arch=${DEFAULTARCH} -lrt -lcuda -lOpenCL -lrt -L${CUDADIR}/lib64/ -lcuda"
-# For NVIDIA OpenCL
-#CC=g++
-#FLAGS="-lrt -fopenmp -lcuda -lOpenCL -D_POSIX_C_SOURCE=199309L -lrt -g"
-#FLAGS="-O3 -fopenmp "
-##FLAGS=$FLAGS" -framework OpenCL"
-#FLAGS=$FLAGS" -L${CUDADIR}/lib64 -lcuda -lOpenCL -lrt -lm"
+function set_accull_env( ) 
+{
+
+# **** For NVIDIA CUDA ****
+if [ -n "$ACCULL_NVIDIA_CUDA_BACKEND" ];
+then
+   CC=${CUDADIR}/bin/nvcc
+   FLAGS="-Xcompiler -fopenmp -arch=${DEFAULTARCH} -lrt -lcuda -lOpenCL -lrt -L${CUDADIR}/lib64/ -lcuda"
+# **** For NVIDIA OpenCL ****
+else if [ -n "$ACCULL_NVIDIA_OPENCL_BACKEND" ];
+     then
+        CC=g++
+        FLAGS="-lrt -fopenmp -lcuda -lOpenCL -D_POSIX_C_SOURCE=199309L -lrt -g"
+        FLAGS="-O3 -fopenmp "
+        if [ -n "$ACCULL_MAC_BACKEND" ];
+        then
+           FLAGS=$FLAGS" -framework OpenCL" # For Mac
+        else
+           FLAGS=$FLAGS" -L${CUDADIR}/lib64 -lcuda -lOpenCL -lrt -lm"
+        fi
+# **** For AMD OpenCL ****
+     else if [ -n "$ACCULL_AMD_OPENCL_BACKEND" ];
+          then
+             CC=g++
+             FLAGS="-lrt -fopenmp -lOpenCL -D_POSIX_C_SOURCE=199309L -lrt -g"
+             FLAGS="-O3 -fopenmp "
+             if [ -n "$ACCULL_MAC_BACKEND" ];
+             then
+                FLAGS=$FLAGS" -framework OpenCL" # For Mac
+             else
+                FLAGS=$FLAGS" -L${AMDOCLDIR}/lib/ -lOpenCL -lrt -lm"
+             fi
+          fi          
+     fi
+fi
+
+}
 
 # ---- Do not edit below this line -----
 
@@ -135,7 +163,7 @@ exe_name="acc.out"
 COPYBACK=1
 export NVCCARCH=${DEFAULTARCH}
 
-while getopts ":kco:vw:ha:" opt; do
+while getopts ":kco:vw:ha:b:" opt; do
    case $opt in
        c) 
 	   info " Just build the object file , do not link the exe "
@@ -159,6 +187,18 @@ while getopts ":kco:vw:ha:" opt; do
        h) info " "
 	   usage
 	   exit 0
+           ;;
+       b) info " Backend $OPTARG selected "
+            case $OPTARG in
+               CUDA)
+                  export ACCULL_NVIDIA_CUDA_BACKEND="1"
+                  ;;
+               OPENCL)
+                  unset $ACCULL_NVIDIA_CUDA_BACKEND
+                  unset $ACCULL_NVIDIA_OPENCL_BACKEND
+                  export ACCULL_AMD_OPENCL_BACKEND="1"
+                  ;;
+	        esac
            ;;
        \?)  
            warn " Invalid option -$OPTARG"
@@ -241,6 +281,10 @@ info " Processing $source_name to $destination "
 build_code $name $source_name $destination $verbose $BUILD $COPYBACK
 
 done
+
+# ---- Final compilation ----
+
+set_accull_env
 
 if [[ "$CC" == *nvcc ]];then
   FLAGS=`echo $FLAGS | sed 's/-arch=sm_..//'`
