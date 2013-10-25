@@ -3,13 +3,14 @@
 #############################################
 
 # CUDA Directory
-export CUDADIR=/usr/local/cuda/
-export OCLSDKDIR=/usr/
+export CUDADIR=/usr/local/cuda
+export OCLSDKDIR=/usr
 
 # Default NVIDIA CUDA architecture
 export DEFAULTARCH="sm_20"
 
 # ---- Do not edit below this line -----
+
 
 # Get directory where is located this script
 SOURCE="${BASH_SOURCE[0]}"
