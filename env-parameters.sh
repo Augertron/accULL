@@ -4,6 +4,7 @@
 
 # CUDA Directory
 export CUDADIR=/usr/local/cuda
+export OCLSDKDIR=/usr
 
 # Default NVIDIA CUDA architecture
 export DEFAULTARCH="sm_20"
@@ -34,8 +35,8 @@ export PYTHONPATH=$YACFDIR
 
 # CUDA and OpenCL PATH
 
-export PATH=$ACCULLBASE/:$CUDADIR/bin/:$PATH
-export LD_LIBRARY_PATH=$CUDADIR/lib64:$CUDADIR/lib:$LD_LIBRARY_PATH
-export C_INCLUDE_PATH=$CUDADIR'/include/':$FRANGOLLODIR'/src/interface/':$C_INCLUDE_PATH
-export CPPFLAGS="-I$CUDADIR/include "$CPPFLAGS
-export LDFLAGS="-L$CUDADIR/lib "$LDFLAGS
+export PATH=$ACCULLBASE/:$OCLSDKDIR/bin/:$CUDADIR/bin/:$PATH
+export LD_LIBRARY_PATH=$=$OCLSDKDIR/lib64:$CUDADIR/lib:$CUDADIR/lib64:$CUDADIR/lib:$LD_LIBRARY_PATH
+export C_INCLUDE_PATH=$OCLSDKDIR'/include/':$CUDADIR'/include/':$FRANGOLLODIR'/src/interface/':$C_INCLUDE_PATH
+export CPPFLAGS="-I$OCLSDKDIR/include -I$CUDADIR/include "$CPPFLAGS
+export LDFLAGS="-L$OCLSDKDIR/lib -L$CUDADIR/lib "$LDFLAGS
