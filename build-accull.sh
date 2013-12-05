@@ -37,23 +37,23 @@ else
 	exit 1
 fi
 read -p "Do you want to compile CUDA Backend (Y/y/n)? " -n 1 -r
-if [[ $REPLY =~ ^[Yy]$ ]]
+if [[ $REPLY =~ '^[Yy]$' || -z $REPLY ]]
 then
     COMPILEWITHCUDA="--enable-cuda"
 fi
 echo ""
 read -p "Do you want to compile OPENCL Backend (Y/y/n)? " -n 1 -r
-if [[ $REPLY =~ ^[Yy]$ ]]
+if [[ $REPLY =~ ^[Yy]$ || -z $REPLY ]]
 then
     COMPILEWITHOPCL="--enable-ocl"
-else 
-if [ -z "${COMPILEWITHCUDA}" ]; then
-	echo ""
-	echo ""
-	echo " >>> ERROR: accull needs at least one backend. Exiting ... "
-	echo ""
-	exit 1
-fi
+	else 
+	if [ -z "${COMPILEWITHCUDA}" ]; then
+		echo ""
+		echo ""
+		echo " >>> ERROR: accull needs at least one backend. Exiting ... "
+		echo ""
+		exit 1
+	fi
 fi
 echo ""
 ./configure --enable-acc $COMPILEWITHCUDA $COMPILEWITHOPCL
