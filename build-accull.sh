@@ -37,16 +37,18 @@ else
 	exit 1
 fi
 read -p "Do you want to compile CUDA Backend (Y/y/n)? " -n 1 -r
-if [[ $REPLY =~ '^[Yy]$' || -z $REPLY ]]
-then
-    COMPILEWITHCUDA="--enable-cuda"
-fi
+case $REPLY in
+    "y" | "Y" | "")
+    	COMPILEWITHCUDA="--enable-cuda"
+    ;;
+esac
 echo ""
 read -p "Do you want to compile OPENCL Backend (Y/y/n)? " -n 1 -r
-if [[ $REPLY =~ ^[Yy]$ || -z $REPLY ]]
-then
-    COMPILEWITHOPCL="--enable-ocl"
-	else 
+case $REPLY in
+    "y" | "Y" | "")
+    	COMPILEWITHOPCL="--enable-ocl"
+    ;;
+    *) 
 	if [ -z "${COMPILEWITHCUDA}" ]; then
 		echo ""
 		echo ""
@@ -54,7 +56,8 @@ then
 		echo ""
 		exit 1
 	fi
-fi
+    ;;
+esac
 echo ""
 ./configure --enable-acc $COMPILEWITHCUDA $COMPILEWITHOPCL
 if [ $? -eq 0 ]; then
