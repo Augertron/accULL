@@ -112,6 +112,8 @@ function build_code ( )
    local verbose=$4   
    local build=1             # Always try to build th code
    local copy_back=$6;
+   local exe_name=$7;
+   local filename=$8;
 
    if [ ! -e $source_file ]; then
 	info " $code_name does not exists "
@@ -144,6 +146,12 @@ function build_code ( )
 		log_file=$(mktemp ./make_log_XXXXX)
 	   fi
 	   CCFLAGS="$CCFLAGS" make &> $log_file
+           local obj=$filename".o"
+           eval "
+if [ -f $obj ] && [ $exe_name ] && [ $exe_name != 'acc.out' ]; then
+	mv $obj $exe_name # Change output file name (-o option)
+fi
+"
 	   cd $base
 	   info " Building finished, check output "
    else
@@ -282,7 +290,7 @@ fi
 
 info " Processing $source_name to $destination "
 
-build_code $name $source_name $destination $verbose $BUILD $COPYBACK
+build_code $name $source_name $destination $verbose $BUILD $COPYBACK $exe_name $filename
 
 done
 
