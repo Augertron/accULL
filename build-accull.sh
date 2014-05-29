@@ -1,5 +1,8 @@
 #! /bin/bash
 
+CUDADEFAULTDIR=/usr/local/cuda
+OCLDEFAULTDIR=/usr/
+
 echo "####################################"
 echo "          accULL installation"
 echo "####################################"
@@ -26,6 +29,13 @@ python _ast_gen.py
 cd -
 echo " ................................. [ok]"
 echo " "
+
+
+eval "if [ -f $ACCULLBASE/params.sh ]; then
+	eval mv $ACCULLBASE/params.sh $ACCULLBASE/params.sh.bak
+fi"
+echo -n "" > params.sh
+
 echo "#######################################"
 echo "         Configuring frangollo "
 echo "#######################################"
@@ -40,6 +50,26 @@ read -p "Do you want to compile CUDA Backend (Y/y/n)? " -n 1 -r
 case $REPLY in
     "y" | "Y" | "")
     	COMPILEWITHCUDA="--enable-cuda"
+	cudasdk=1
+	while [ $cudasdk -ne 0 ]; do
+	echo ""
+        read -p "Select CUDA SDK directory ($CUDADEFAULTDIR): " -r
+	case $REPLY in
+		"")
+			echo "export CUDASDKDIR=$CUDADEFAULTDIR" >> $ACCULLBASE/params.sh
+			cudasdk=0
+		;;
+		*)
+	                eval "if [ -d $REPLY ]; then
+			  echo 'export CUDASDKDIR=$REPLY' >> $ACCULLBASE/params.sh
+			  cudasdk=0
+			  else
+                            echo '$REPLY directory does not exists!'
+			fi
+                	"
+		;;
+	esac
+	done
     ;;
 esac
 echo ""
@@ -47,6 +77,26 @@ read -p "Do you want to compile OPENCL Backend (Y/y/n)? " -n 1 -r
 case $REPLY in
     "y" | "Y" | "")
     	COMPILEWITHOPCL="--enable-ocl"
+	oclsdk=1
+	while [ $oclsdk -ne 0 ]; do
+	echo ""
+        read -p "Select OCL SDK directory ($OCLDEFAULTDIR): " -r
+	case $REPLY in
+		"")
+			echo "export OCLSDKDIR=$OCLDEFAULTDIR" >> $ACCULLBASE/params.sh
+			oclsdk=0
+		;;
+		*)
+	                eval "if [ -d $REPLY ]; then
+			    echo 'export OCLSDKDIR=$REPLY' >> $ACCULLBASE/params.sh
+			    oclsdk=0
+			  else
+                            echo '$REPLY directory does not exists!'
+			fi
+                	"
+		;;
+	esac
+	done
     ;;
     *) 
 	if [ -z "${COMPILEWITHCUDA}" ]; then

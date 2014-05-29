@@ -5,16 +5,16 @@
 For prerequisites see README file.
 -----------------------------------------------------------------------
 
-1. Decompress the accull-0.3.tar.gz file
-        $ tar xvzf accull-0.3.tar.gz
+1. Decompress the accull-0.4.tar.gz file
+        $ tar xvzf accull-0.4.tar.gz
 
-2. Set the right path to environment variables in file env-parameters.sh.
-        $ cd accull-0.3/
-        $ vim env-parameters.sh
-        $ . ./env-parameters.sh
-
-3. Configure and compile accULL.
+2. Configure and compile accULL.
+        $ cd accull-0.4/
         $ ./build-accull.sh
+
+3. Check the right path to environment variables in enviroment files.
+        $ vim params.sh
+        $ . ./env-parameters.sh
 
 4. Verify the settings of the yacf/config_local.py & yacf/makefile.mk
         $ $EDITOR yacf/config_local.py

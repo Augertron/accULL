@@ -2,7 +2,10 @@
 #          ACCULL ENV VARIABLES
 #############################################
 
-# CUDA Directory
+# SKDs directories 
+# $ACCULLBASE/params.sh override those variables
+#   if it exists. Run ./build-accull.sh to 
+#   create it in any case.
 export CUDADIR=/usr/local/cuda
 export OCLSDKDIR=/usr
 
@@ -32,6 +35,10 @@ export FRANGOLLODIR=$ACCULLBASE/frangollo
 
 # PYTHONPATH
 export PYTHONPATH=$YACFDIR
+
+# If exists loads params.sh
+params=$ACCULLBASE"/params.sh"
+eval "if [ -f $params ]; then source $params; fi"
 
 # CUDA and OpenCL PATH
 
