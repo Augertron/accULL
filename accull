@@ -9,6 +9,8 @@ PYTHONBIN="python"
 # Default accULL backend is CUDA
 export ACCULL_NVIDIA_CUDA_BACKEND=1
 
+# ---- Do not edit below this line -----
+
 function set_accull_env( ) 
 {
 
@@ -47,12 +49,10 @@ fi
 
 }
 
-# ---- Do not edit below this line -----
-
 base=$(pwd)
 export PYTHONPATH=$YACF_PATH
 YACF_DRIVER="bin/c2frangollo.py"
-release=0.3
+release=0.4
 
   echo ' **************************************** '
   echo '                 _    _ _      _          '
