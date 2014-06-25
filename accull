@@ -138,14 +138,30 @@ function build_code ( )
    info " StS translation appears to be OK "
 
    if [[ $build -gt 0 ]]; then
-           info " Building the project directory "$destination_dir
-           cd $destination_dir/Frangollo/
-           if [[ $verbose -gt 0 ]]; then
+            info " Building the project directory "$destination_dir
+            cd $destination_dir/Frangollo/
+            if [[ $verbose -gt 0 ]]; then
                 log_file=1
-           else
+            else
                 log_file=$(mktemp ./make_log_XXXXX)
-           fi
-           .   CCFLAGS="$CCFLAGS" make &> $log_file
+            fi
+            CCFLAGS="$CCFLAGS" make &> $log_file
+
+            if [[ $? -gt 0 ]]; then
+                warn " Building finished with some failure, check output in "$log_file" file"
+                echo '-----------------'
+                build_errors=$(cat $log_file | grep error)
+                if [ -n "$build_errors" ]; then
+                    echo "$build_errors"
+                else
+                    cat $log_file
+                fi
+                echo '-----------------'
+                cd $base
+                exit 1
+            else
+                info " Building appears to be OK"
+            fi      
 
 #           local obj=$filename".o"
 #           eval "
@@ -153,8 +169,7 @@ function build_code ( )
 #        mv $obj $exe_name # Change output file name (-o option)
 #fi
 #"
-           cd $base
-           info " Building finished, check output "
+            cd $base
    else
         warn " Not building the project directory "
    fi
