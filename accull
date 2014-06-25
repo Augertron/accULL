@@ -116,50 +116,51 @@ function build_code ( )
    local filename=$8;
 
    if [ ! -e $source_file ]; then
-	info " $code_name does not exists "
-	return
+        info " $code_name does not exists "
+        return
    else
-	info " Building $code_name "
+        info " Building $code_name "
    fi
    echo  "* Running StS translation "
 
    if [[ $verbose -gt 0 ]]; then
-	$PYTHONBIN $YACF_PATH/$YACF_DRIVER $source_file $destination_dir
+        $PYTHONBIN $YACF_PATH/$YACF_DRIVER $source_file $destination_dir
    else
-	log_file=$(mktemp ./yacf_log_XXXXX)
-   	$PYTHONBIN $YACF_PATH/$YACF_DRIVER $source_file $destination_dir &> $log_file
-	info " See $log_file for more details "
+        log_file=$(mktemp ./yacf_log_XXXXX)
+           $PYTHONBIN $YACF_PATH/$YACF_DRIVER $source_file $destination_dir &> $log_file
+        info " See $log_file for more details "
    fi
 
    if [ ! -d $destination_dir/Frangollo ]; then
-	warn " Compilation of $code_name FAILED (no Project directory build )"
-	return
+        warn " Compilation of $code_name FAILED (no Project directory build )"
+        return
    fi
    info " StS translation appears to be OK "
 
    if [[ $build -gt 0 ]]; then
-	   info " Building the project directory "$destination_dir
-	   cd $destination_dir/Frangollo/
-	   if [[ $verbose -gt 0 ]]; then
-		log_file=1
-	   else
-		log_file=$(mktemp ./make_log_XXXXX)
-	   fi
-	   CCFLAGS="$CCFLAGS" make &> $log_file
-           local obj=$filename".o"
-           eval "
-if [ -f $obj ] && [ $exe_name ] && [ $exe_name != 'acc.out' ]; then
-	mv $obj $exe_name # Change output file name (-o option)
-fi
-"
-	   cd $base
-	   info " Building finished, check output "
+           info " Building the project directory "$destination_dir
+           cd $destination_dir/Frangollo/
+           if [[ $verbose -gt 0 ]]; then
+                log_file=1
+           else
+                log_file=$(mktemp ./make_log_XXXXX)
+           fi
+           .   CCFLAGS="$CCFLAGS" make &> $log_file
+
+#           local obj=$filename".o"
+#           eval "
+#if [ -f $obj ] && [ $exe_name ] && [ $exe_name != 'acc.out' ]; then
+#        mv $obj $exe_name # Change output file name (-o option)
+#fi
+#"
+           cd $base
+           info " Building finished, check output "
    else
-	warn " Not building the project directory "
+        warn " Not building the project directory "
    fi
 
    if [[ ($copy_back -gt 0) && ($build -gt 0) ]]; then
-	  info " Copying result files back to origin"
+          info " Copying result files back to origin"
      cp -f $destination_dir/Frangollo/*.{o,ptx,cl} $base &> /dev/null 
    fi
 
@@ -178,27 +179,27 @@ export NVCCARCH=${DEFAULTARCH}
 while getopts ":kco:vw:ha:b:" opt; do
    case $opt in
        c) 
-	   info " Just build the object file , do not link the exe "
-	   BUILD=1
-	   ;;
+           info " Just build the object file , do not link the exe "
+           BUILD=1
+           ;;
        v) info " Verbose output "
-	   verbose=1
+           verbose=1
            ;;
        w) info " Output directory name $OPTARG "
-		destination=$OPTARG
-	   ;;
+                destination=$OPTARG
+           ;;
        o) info " Output executable name $OPTARG"
-		exe_name=$OPTARG
-	   ;;   
+                exe_name=$OPTARG
+           ;;   
        k)  info " Not copying back generated files "
-	   	COPYBACK=0
-	   ;;
+                COPYBACK=0
+           ;;
        a) info " NVIDIA architectecure $OPTARG selected "
-	        export NVCCARCH=$OPTARG
+                export NVCCARCH=$OPTARG
            ;;
        h) info " "
-	   usage
-	   exit 0
+           usage
+           exit 0
            ;;
        b) info " Backend $OPTARG selected "
             case $OPTARG in
@@ -210,7 +211,7 @@ while getopts ":kco:vw:ha:b:" opt; do
                   unset $ACCULL_NVIDIA_OPENCL_BACKEND
                   export ACCULL_AMD_OPENCL_BACKEND="1"
                   ;;
-	        esac
+                esac
            ;;
        \?)  
            warn " Invalid option -$OPTARG"
@@ -218,21 +219,21 @@ while getopts ":kco:vw:ha:b:" opt; do
            ;;
        :)
            warn " Option -$OPTARG requires an argument "
-	   usage 
+           usage 
            exit 1
            ;;
    esac
 done
 
 if [ ! -e "$YACF_PATH" ]; then
- 	warn " YaCF could not be found in $YACF_PATH "
-	usage
-	exit 1
+         warn " YaCF could not be found in $YACF_PATH "
+        usage
+        exit 1
 fi
 
 if [ ! -e "$FRANGOLLO_PATH" ]; then
-	warn " Frangollo could not be found "
-	exit 1
+        warn " Frangollo could not be found "
+        exit 1
 fi
 
 
@@ -250,25 +251,25 @@ if [[ $extension == 'o' ]]; then
 fi
 
 if [[ -z "$source_name" ]]; then
-	warn " Cannot find $source_name "
-	usage
-	exit 1
+        warn " Cannot find $source_name "
+        usage
+        exit 1
 fi
 
 if [ ! -e $source_name ]; then
-	warn " Cannot open input file $source_name"
-	usage
-	exit 1
+        warn " Cannot open input file $source_name"
+        usage
+        exit 1
 fi
 
 if [ ! -e $YACF_PATH/config_local.py ]; then
-	warn " YaCF configuration file not found "
-	usage
-	exit 1
+        warn " YaCF configuration file not found "
+        usage
+        exit 1
 fi
 
 if [ ! -e $YACF_PATH/makefile.mk ]; then
-	warn " Default makefile.mk not found. "
+        warn " Default makefile.mk not found. "
    warn " Ensure you set a path to the makefile.mk file in the config_local or you'll get building errors. "
 fi
 
@@ -283,9 +284,9 @@ name=$(basename $destination)
 dir=$(dirname $destination)
 
 if [ ! -e $dir ]; then
-	warn " Cannot access $dir to write the output "
-	usage
-	exit 1
+        warn " Cannot access $dir to write the output "
+        usage
+        exit 1
 fi
 
 info " Processing $source_name to $destination "
