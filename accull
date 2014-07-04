@@ -7,7 +7,7 @@ FRANGOLLO_PATH=${FRANGOLLODIR}
 PYTHONBIN="python"
 
 # Default accULL backend is CUDA
-export ACCULL_NVIDIA_CUDA_BACKEND=1
+#export ACCULL_NVIDIA_OPENCL_BACKEND=1
 
 # ---- Do not edit below this line -----
 
@@ -18,7 +18,7 @@ function set_accull_env( )
 if [ -n "$ACCULL_NVIDIA_CUDA_BACKEND" ];
 then
    CC=${CUDADIR}/bin/nvcc
-   FLAGS="-Xcompiler -fopenmp -arch=${DEFAULTARCH} -lrt -lcuda -lOpenCL -lrt -L${CUDADIR}/lib64/ -lcuda"
+   FLAGS="-Xcompiler -fopenmp -arch=${DEFAULTARCH} -lrt -lcuda -lOpenCL -lrt -lcuda"
 # **** For NVIDIA OpenCL ****
 else if [ -n "$ACCULL_NVIDIA_OPENCL_BACKEND" ];
      then
@@ -29,7 +29,7 @@ else if [ -n "$ACCULL_NVIDIA_OPENCL_BACKEND" ];
         then
            FLAGS=$FLAGS" -framework OpenCL" # For Mac
         else
-           FLAGS=$FLAGS" -L${CUDADIR}/lib64 -lcuda -lOpenCL -lrt -lm"
+           FLAGS=$FLAGS" -lcuda -lOpenCL -lrt -lm"
         fi
 # **** For AMD OpenCL ****
      else if [ -n "$ACCULL_AMD_OPENCL_BACKEND" ];
@@ -41,7 +41,7 @@ else if [ -n "$ACCULL_NVIDIA_OPENCL_BACKEND" ];
              then
                 FLAGS=$FLAGS" -framework OpenCL" # For Mac
              else
-                FLAGS=$FLAGS" -L${AMDOCLDIR}/lib/ -lOpenCL -lrt -lm"
+                FLAGS=$FLAGS" -lOpenCL -lrt -lm"
              fi
           fi          
      fi
@@ -222,8 +222,8 @@ while getopts ":kco:vw:ha:b:" opt; do
                   export ACCULL_NVIDIA_CUDA_BACKEND="1"
                   ;;
                OPENCL)
-                  unset $ACCULL_NVIDIA_CUDA_BACKEND
-                  unset $ACCULL_NVIDIA_OPENCL_BACKEND
+                  unset ACCULL_NVIDIA_CUDA_BACKEND
+                  unset ACCULL_NVIDIA_OPENCL_BACKEND
                   export ACCULL_AMD_OPENCL_BACKEND="1"
                   ;;
                 esac
@@ -321,7 +321,12 @@ fi
 
 if [[ $BUILD -eq 0 ]]; then
    # Call the native compiler to link all the .o files
-   compline="$CC ${FLAGS} ${archflag} *.o $FRANGOLLO_PATH/src/libfrangollo.a -o $exe_name"
+   if [ -n "$ACCULL_NVIDIA_CUDA_BACKEND" ];
+   then
+      compline="$CC ${FLAGS} ${archflag} *.o $FRANGOLLO_PATH/src/libfrangollo.a -o $exe_name"
+   else
+      compline="$CC *.o $FRANGOLLO_PATH/src/libfrangollo.a ${FLAGS} ${archflag} -o $exe_name"
+   fi
    echo $compline
    `$compline`
 fi

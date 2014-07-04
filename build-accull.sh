@@ -57,11 +57,13 @@ case $REPLY in
 	case $REPLY in
 		"")
 			echo "export CUDASDKDIR=$CUDADEFAULTDIR" >> $ACCULLBASE/params.sh
+			echo "export ACCULL_NVIDIA_CUDA_BACKEND=1" >> $ACCULLBASE/params.sh
 			cudasdk=0
 		;;
 		*)
 	                eval "if [ -d $REPLY ]; then
 			  echo 'export CUDASDKDIR=$REPLY' >> $ACCULLBASE/params.sh
+			  echo 'export ACCULL_NVIDIA_CUDA_BACKEND=1' >> $ACCULLBASE/params.sh
 			  cudasdk=0
 			  else
                             echo '$REPLY directory does not exists!'
@@ -84,11 +86,15 @@ case $REPLY in
 	case $REPLY in
 		"")
 			echo "export OCLSDKDIR=$OCLDEFAULTDIR" >> $ACCULLBASE/params.sh
+			echo "unset ACCULL_NVIDIA_CUDA_BACKEND" >>  $ACCULLBASE/params.sh
+			echo "export ACCULL_AMD_OPENCL_BACKEND=1" >> $ACCULLBASE/params.sh
 			oclsdk=0
 		;;
 		*)
 	                eval "if [ -d $REPLY ]; then
 			    echo 'export OCLSDKDIR=$REPLY' >> $ACCULLBASE/params.sh
+			    echo 'unset ACCULL_NVIDIA_CUDA_BACKEND' >>  $ACCULLBASE/params.sh
+			    echo 'export ACCULL_AMD_OPENCL_BACKEND=1' >> $ACCULLBASE/params.sh
 			    oclsdk=0
 			  else
                             echo '$REPLY directory does not exists!'
@@ -115,7 +121,7 @@ if [ $? -eq 0 ]; then
 else
 	exit 1
 fi
-make
+make clean; make
 if [ $? -eq 0 ]; then
 	echo " ................................. [ok]"
 else
