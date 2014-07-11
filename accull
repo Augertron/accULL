@@ -98,7 +98,7 @@ function usage ( )
   echo "  -c : Do not create a binary, just the object files "
   echo "  -w name : Store the temporary transformation files in directory \"name\" "
   echo "  -a nvidia_arch : Select NVIDIA architecture. Default is $DEFAULTARCH"
-  echo "  -b CUDA|OPENCL : Select accULL Backend. Default is CUDA "
+  echo "  -b CUDA|OPENCL|LOOPY-OPENCL : Select accULL Backend. Default is CUDA "
 }
 
 # run_test
