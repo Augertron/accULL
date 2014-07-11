@@ -41,17 +41,19 @@ device(s).
 Python >= 2.7.x             : http://www.python.org/
 Ply >= 3.3 (Python Lex-Yacc): http://www.dabeaz.com/ply/
 Mako templates              : http://www.makotemplates.org/
+Loo.py                      : http://mathema.tician.de/software/loopy/
 lxml (optional)             : http://lxml.de/
 Sphinx (optional)           : http://sphinx.pocoo.org/
 SymPy 0.7.4.1 (optional)    : http://sympy.org/
 
 Example of installation:
 
-    $ easy_install ply
-    $ easy_install mako
-    $ easy_install lxml
-    $ easy_install sphinx
-    $ easy_install sympy
+    # pip install ply
+    # pip install mako
+    # pip install https://github.com/inducer/loopy/tarball/master
+    # pip install lxml
+    # pip install sphinx
+    # pip install sympy
 
 
 ************************************************************************
