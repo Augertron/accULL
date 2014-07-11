@@ -220,11 +220,22 @@ while getopts ":kco:vw:ha:b:" opt; do
             case $OPTARG in
                CUDA)
                   export ACCULL_NVIDIA_CUDA_BACKEND="1"
+                  unset ACCULL_NVIDIA_OPENCL_BACKEND
+                  unset ACCULL_AMD_OPENCL_BACKEND
+                  unset ACCULL_LOOPY_OPENCL_BACKEND
                   ;;
                OPENCL)
                   unset ACCULL_NVIDIA_CUDA_BACKEND
                   unset ACCULL_NVIDIA_OPENCL_BACKEND
                   export ACCULL_AMD_OPENCL_BACKEND="1"
+                  unset ACCULL_LOOPY_OPENCL_BACKEND
+                  ;;
+                esac
+               LOOPY-OPENCL)
+                  unset ACCULL_NVIDIA_CUDA_BACKEND
+                  unset ACCULL_NVIDIA_OPENCL_BACKEND
+                  export ACCULL_AMD_OPENCL_BACKEND="1"
+                  export ACCULL_LOOPY_OPENCL_BACKEND="1"
                   ;;
                 esac
            ;;
