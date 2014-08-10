@@ -219,11 +219,13 @@ while getopts ":kco:vw:ha:b:" opt; do
        b) info " Backend $OPTARG selected "
             case $OPTARG in
                CUDA)
+                  export FRANGOLLO_PLATFORM="CUDA"
                   export ACCULL_NVIDIA_CUDA_BACKEND="1"
                   ;;
                OPENCL)
-                  unset ACCULL_NVIDIA_CUDA_BACKEND
-                  unset ACCULL_NVIDIA_OPENCL_BACKEND
+                  export FRANGOLLO_PLATFORM="OPENCL"
+                  #unset ACCULL_NVIDIA_CUDA_BACKEND
+                  #unset ACCULL_NVIDIA_OPENCL_BACKEND
                   export ACCULL_AMD_OPENCL_BACKEND="1"
                   ;;
                 esac

@@ -86,16 +86,20 @@ case $REPLY in
 	case $REPLY in
 		"")
 			echo "export OCLSDKDIR=$OCLDEFAULTDIR" >> $ACCULLBASE/params.sh
-			echo "unset ACCULL_NVIDIA_CUDA_BACKEND" >>  $ACCULLBASE/params.sh
+			if [ -z $COMPILEWITHCUDA ]; then
+				echo "unset ACCULL_NVIDIA_CUDA_BACKEND" >>  $ACCULLBASE/params.sh
+			fi
 			echo "export ACCULL_AMD_OPENCL_BACKEND=1" >> $ACCULLBASE/params.sh
 			oclsdk=0
 		;;
 		*)
 	                eval "if [ -d $REPLY ]; then
-			    echo 'export OCLSDKDIR=$REPLY' >> $ACCULLBASE/params.sh
-			    echo 'unset ACCULL_NVIDIA_CUDA_BACKEND' >>  $ACCULLBASE/params.sh
-			    echo 'export ACCULL_AMD_OPENCL_BACKEND=1' >> $ACCULLBASE/params.sh
-			    oclsdk=0
+				echo 'export OCLSDKDIR=$REPLY' >> $ACCULLBASE/params.sh
+				if [ -z $COMPILEWITHCUDA ]; then
+					echo 'unset ACCULL_NVIDIA_CUDA_BACKEND' >>  $ACCULLBASE/params.sh
+				fi
+				echo 'export ACCULL_AMD_OPENCL_BACKEND=1' >> $ACCULLBASE/params.sh
+				oclsdk=0
 			  else
                             echo '$REPLY directory does not exists!'
 			fi
