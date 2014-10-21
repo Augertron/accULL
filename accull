@@ -98,7 +98,8 @@ function usage ( )
   echo "  -c : Do not create a binary, just the object files "
   echo "  -w name : Store the temporary transformation files in directory \"name\" "
   echo "  -a nvidia_arch : Select NVIDIA architecture. Default is $DEFAULTARCH"
-  echo "  -b CUDA|OPENCL|LOOPY-OPENCL : Select accULL Backend. Default is CUDA "
+  echo "  -b CUDA|OPENCL : Select accULL Backend. Default is CUDA "
+  echo "  -l : Compile OpenCL kernels with Loo.py "
 }
 
 # run_test
@@ -191,7 +192,7 @@ exe_name="acc.out"
 COPYBACK=1
 export NVCCARCH=${DEFAULTARCH}
 
-while getopts ":kco:vw:ha:b:" opt; do
+while getopts ":kco:vw:ha:b:l" opt; do
    case $opt in
        c) 
            info " Just build the object file , do not link the exe "
@@ -222,22 +223,17 @@ while getopts ":kco:vw:ha:b:" opt; do
                   export ACCULL_NVIDIA_CUDA_BACKEND="1"
                   unset ACCULL_NVIDIA_OPENCL_BACKEND
                   unset ACCULL_AMD_OPENCL_BACKEND
-                  unset ACCULL_LOOPY_OPENCL_BACKEND
+                  unset ACCULL_LOOPY_OPENCL
                   ;;
                OPENCL)
                   unset ACCULL_NVIDIA_CUDA_BACKEND
                   unset ACCULL_NVIDIA_OPENCL_BACKEND
                   export ACCULL_AMD_OPENCL_BACKEND="1"
-                  unset ACCULL_LOOPY_OPENCL_BACKEND
                   ;;
-                esac
-               LOOPY-OPENCL)
-                  unset ACCULL_NVIDIA_CUDA_BACKEND
-                  unset ACCULL_NVIDIA_OPENCL_BACKEND
-                  export ACCULL_AMD_OPENCL_BACKEND="1"
-                  export ACCULL_LOOPY_OPENCL_BACKEND="1"
-                  ;;
-                esac
+            esac
+            ;;
+       l)
+           export ACCULL_LOOPY_OPENCL="1"
            ;;
        \?)  
            warn " Invalid option -$OPTARG"
