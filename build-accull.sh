@@ -46,7 +46,7 @@ if [ $? -eq 0 ]; then
 else
 	exit 1
 fi
-read -p "Do you want to compile CUDA Backend (Y/y/n)? " -n 1 -r
+read -p "Do you want to compile CUDA Backend (Y/y/n)? [Y]es: " -n 1 -r
 case $REPLY in
     "y" | "Y" | "")
     	COMPILEWITHCUDA="--enable-cuda"
@@ -75,7 +75,7 @@ case $REPLY in
     ;;
 esac
 echo ""
-read -p "Do you want to compile OPENCL Backend (Y/y/n)? " -n 1 -r
+read -p "Do you want to compile OPENCL Backend (Y/y/n)? [Y]es: " -n 1 -r
 case $REPLY in
     "y" | "Y" | "")
     	COMPILEWITHOPCL="--enable-ocl"
@@ -119,7 +119,22 @@ case $REPLY in
     ;;
 esac
 echo ""
-./configure --enable-acc $COMPILEWITHCUDA $COMPILEWITHOPCL
+
+
+read -p "Do you want to compile Debug options (Y/y/n)? [N]o: " -n 1 -r
+case $REPLY in
+    "y" | "Y")
+		echo ""
+		DEBUG='--enable-debug'
+    	;;
+    *)  
+		echo ""
+		DEBUG=''
+    	;;
+esac
+echo ""
+
+./configure --enable-acc $COMPILEWITHCUDA $COMPILEWITHOPCL $DEBUG
 if [ $? -eq 0 ]; then
 	echo " ................................. [ok]"
 else
