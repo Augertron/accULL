@@ -34,10 +34,10 @@ export YACFDIR=$ACCULLBASE/yacf/
 export FRANGOLLODIR=$ACCULLBASE/frangollo
 
 # PYTHONPATH
-export PYTHONPATH=$YACFDIR
+export PYTHONPATH=$YACFDIR:$PYTHONPATH
 
 # If exists loads params.sh
-params=$ACCULLBASE"/params.sh"
+params="$ACCULLBASE/params.sh"
 eval "if [ -f $params ]; then source $params; fi"
 
 # CUDA and OpenCL PATH
