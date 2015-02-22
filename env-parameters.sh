@@ -41,9 +41,13 @@ params=$ACCULLBASE"/params.sh"
 eval "if [ -f $params ]; then source $params; fi"
 
 # CUDA and OpenCL PATH
-
+if [[ $(uname -i) == 'armv7l' ]]; then	# Parallella arch armv7l
+	OPCL_LIB_DIR='lib'
+else
+	OPCL_LIB_DIR='lib/x86_64-linux-gnu'
+fi
 export ACCULL_CUDA_LIB_DIR=$CUDADIR/lib:$CUDADIR/lib64
-export ACCULL_OPCL_LIB_DIR=$OCLSDKDIR/lib/x86_64-linux-gnu
+export ACCULL_OPCL_LIB_DIR=$OCLSDKDIR/$OPCL_LIB_DIR
 
 export PATH=$ACCULLBASE/:$OCLSDKDIR/bin/:$CUDADIR/bin/:$PATH
 export LD_LIBRARY_PATH=$=$ACCULL_OPCL_LIB_DIR:$ACCULL_CUDA_LIB_DIR:$LD_LIBRARY_PATH
