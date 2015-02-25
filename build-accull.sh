@@ -1,8 +1,5 @@
 #! /bin/bash
 
-CUDADEFAULTDIR=/usr/local/cuda
-OCLDEFAULTDIR=/usr/
-
 echo "####################################"
 echo "          accULL installation"
 echo "####################################"
@@ -40,7 +37,23 @@ source env-parameters.sh
 echo " ACCULLBASE = $ACCULLBASE "
 echo ""
 
+CUDADEFAULTDIR=/usr/local/cuda
+OCLDEFAULTDIR=/usr/
+
+if [ -f $ACCULLBASE/params.sh ]; then
+	echo "$ACCULLBASE/params.sh exists ..."
+	TMP=`cat $ACCULLBASE/params.sh|grep CUDADIR|cut -d'=' -f2`
+	if [ -n $TMP ]; then
+		CUDADEFAULTDIR=$TMP
+	fi
+	TMP=`cat $ACCULLBASE/params.sh|grep OCLSDKDIR|cut -d'=' -f2`
+	if [ -n $TMP ]; then
+		OCLDEFAULTDIR=$TMP
+	fi
+fi
+
 eval "if [ -f $ACCULLBASE/params.sh ]; then
+	echo 'Backing up params.sh to params.sh.bak'
 	eval mv $ACCULLBASE/params.sh $ACCULLBASE/params.sh.bak
 fi"
 echo -n "" > params.sh
