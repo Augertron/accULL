@@ -47,11 +47,11 @@ SymPy 0.7.4.1 (optional)    : http://sympy.org/
 
 Example of installation:
 
-    $ easy_install ply
-    $ easy_install mako
-    $ easy_install lxml
-    $ easy_install sphinx
-    $ easy_install sympy
+    $ pip install ply
+    $ pip install mako
+    $ pip install lxml
+    $ pip install sphinx
+    $ pip install sympy
 
 
 ************************************************************************
@@ -118,6 +118,9 @@ Read INSTALL file included with this package.
 ************************************************************************
                              Known Issues
 ************************************************************************
+- WARNING: In release 0.4alpha the support for reductions is not 
+usable with OpenCL, since the improvements in Frangollo library are not
+yet completed, but the CUDA support is fully functional.
 - Using parameters of type double in some platforms may produce incorrect
 results. In particular, using this release with the Mac OpenCL Framework
 in the AMD GPU produces incorrect results in some tests. Use of the GPU 
