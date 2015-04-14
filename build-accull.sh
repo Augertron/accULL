@@ -33,7 +33,7 @@ echo " LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
 echo " OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE "
 echo " -------------------------------------------------------------------------------- "
 
-source env-parameters.sh
+source ./env-parameters.sh
 echo " ACCULLBASE = $ACCULLBASE "
 echo ""
 
