@@ -14,6 +14,11 @@ export DEFAULTARCH="sm_20"
 
 # ---- Do not edit below this line -----
 
+CPU_ARCH=`uname -m`
+export ACCULL_CPU_ARCH=${CPU_ARCH}
+if [ ${CPU_ARCH} == 'x86_64' ]; then
+  export ACCULL_x86_64=1
+fi
 
 # Get directory where is located this script
 SOURCE="${BASH_SOURCE[0]}"
