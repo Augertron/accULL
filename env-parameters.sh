@@ -16,7 +16,7 @@ export DEFAULTARCH="sm_20"
 
 CPU_ARCH=`uname -m`
 export ACCULL_CPU_ARCH=${CPU_ARCH}
-if [ ${CPU_ARCH} == 'x86_64' ]; then
+if [ ${CPU_ARCH} = 'x86_64' ]; then
   export ACCULL_x86_64=1
 fi
 
